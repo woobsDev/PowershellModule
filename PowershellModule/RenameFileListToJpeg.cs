@@ -56,7 +56,7 @@ namespace PowershellModule
                 WriteWarning(DestinationPath+" doesn't exist.  Create directory(Y\\N)?");
                 createDirectoryChoice = Console.ReadLine();
 
-                if (createDirectoryChoice == "y" || createDirectoryChoice == "Y")
+                if (createDirectoryChoice.ToUpper() == "Y")
                 {
                     Directory.CreateDirectory(DestinationPath);
                     WriteObject(DestinationPath + " created.");
@@ -68,9 +68,8 @@ namespace PowershellModule
                         CopyFilesAndRename(file, DestinationPath);
                     }
                 }
-                else if (createDirectoryChoice == "n" || createDirectoryChoice == "N")
+                else if (createDirectoryChoice.ToUpper() == "N" || createDirectoryChoice != "Y")
                 {
-                    WriteObject(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\Microsoft\\Windows\\Themes");
                     WriteObject("Exiting...");
                     return;
                 }
