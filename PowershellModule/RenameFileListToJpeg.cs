@@ -62,7 +62,7 @@ namespace PowershellModule
                     WriteObject(DestinationPath + " created.");
 
 
-                    WriteObject("Copying from known locations containing desktop wallpapers to " + DestinationPath);
+                    WriteObject("Copying files from known locations containing desktop wallpapers to " + DestinationPath);
                     foreach (string file in filesToCopy)
                     {
                         CopyFilesAndRename(file, DestinationPath);
