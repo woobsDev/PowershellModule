@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Management.Automation;
+﻿namespace PowershellModule
+{ 
+    using System;
+    using System.IO;
+    using System.Management.Automation;
 
-namespace PowershellModule
-{
-    [Cmdlet(VerbsCommon.Rename, "FileListToJpeg")]
-    public class RenameFileListToJpeg : PSCmdlet
+    [Cmdlet(VerbsCommon.Copy, "WindowsBackgroundFilesWithJpeg")]
+    public class CopyWindowsBackgroundFilesWithJpeg : PSCmdlet
     {
         [Parameter(
             Mandatory = true,
@@ -37,10 +33,11 @@ namespace PowershellModule
 
         protected override void BeginProcessing()
         {
+            // Hard coded for testing  //
             //this.DestinationPath = @"C:\temp\wallpaperDesktops\";
+            //this.Path = this.SessionState.Path.CurrentLocation.ToString();
             this.systemDirectoryWithPictures = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
                 + @"\AppData\Local\Packages\Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy\LocalState\Assets";
-            //this.Path = this.SessionState.Path.CurrentLocation.ToString();
 
             this.filesToCopy = Directory.GetFiles(systemDirectoryWithPictures);
         }
@@ -73,12 +70,10 @@ namespace PowershellModule
                     WriteObject("Exiting...");
                     return;
                 }
-                
-                
             }
             else
             {
-                WriteObject("Copying items to " + DestinationPath);
+                WriteObject("Copying files from known locations containing desktop wallpapers to " + DestinationPath);
                 foreach (string file in filesToCopy)
                 {
                     CopyFilesAndRename(file, DestinationPath);

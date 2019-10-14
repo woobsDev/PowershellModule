@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Management.Automation;
-
-namespace PowershellModule
+﻿namespace PowershellModule
 {
+    using System.Data;
+    using System.IO;
+    using System.Management.Automation;
+
     [Cmdlet(VerbsCommon.Get, "FileList")]
     public class GetFileList : PSCmdlet
     {
@@ -20,8 +17,8 @@ namespace PowershellModule
 
         [Parameter(
             Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ValueFromPipeline = true,
+            ValueFromPipelineByPropertyName = false,
+            ValueFromPipeline = false,
             Position = 1,
             HelpMessage = "List directories")]
         public SwitchParameter ListDirectories { get; set; }
@@ -35,34 +32,24 @@ namespace PowershellModule
 
         protected override void ProcessRecord()
         {
-            switch(listDirectorySwitchValue)
+            if(!Directory.Exists(Path))
             {
-                case true:
-                    if(!Directory.Exists(Path))
-                    {
-                        WriteObject(this.SessionState.Path.CurrentLocation.ToString());
-                    }
-                    else
-                    {
-                        WriteObject(Directory.GetDirectories(Path));
-                    }
-                    break;
-
-                case false:
-                    if (!Directory.Exists(Path))
-                    {
-                        WriteObject(Directory.GetFiles(this.SessionState.Path.CurrentLocation.ToString()));
-                    }
-                    else
-                    {
-                        //WriteObject(Directory.GetDirectories(path));
-                        WriteObject(Directory.GetFiles(Path));
-                    }
-                    break;
-
+                WriteWarning("Directory does not exist!  Exiting...");
+                return;
             }
+            else
+            {
+                switch(listDirectorySwitchValue)
+                {
+                    case true:
+                        WriteObject(Directory.GetDirectories(Path));
+                        break;
 
-            
+                    case false:
+                        WriteObject(Directory.GetFiles(Path));
+                        break;
+                }
+            }
         }
 
         protected override void EndProcessing()
